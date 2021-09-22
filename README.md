@@ -46,7 +46,8 @@ Run the quickstart program
 
 ``` bash
 git clone https://github.com/vbudi000/cloudpak-quickstart
-mkdir path-to-setup-dir
-cd path-to-setup-dir
-../cloudpak-quickstart/scripts/quickstart.sh
+echo $GITHUB_TOKEN | gh auth login --with-token
+./cloudpak-quickstart/scripts/quickstart.sh
 ```
+
+**Note**: you must either supply the `install-config.yaml` in the $SOURCE_DIR or set that you already login to the cluster using `oc login` command. 
