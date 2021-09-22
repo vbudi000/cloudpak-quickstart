@@ -19,6 +19,7 @@ fi
 cat > apps-recipe <<EOF
 argocd\/ace\/cicd.yaml
 argocd\/ace\/dev.yaml
+argocd\/ace\/stage.yaml
 argocd\/soapserver\/soapserver.yaml
 EOF
 
