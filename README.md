@@ -17,8 +17,9 @@ These are the pre-requisites:
 - Install the [kubeseal CLI](https://github.com/bitnami-labs/sealed-secrets#homebrew) 
 - Install the [Tekton CLI](https://tekton.dev/docs/cli/)
 - Install the [ArgoCD CLI](https://argoproj.github.io/argo-cd/cli_installation/)
+- Install [jq](https://stedolan.github.io/jq/) and [yq](https://github.com/mikefarah/yq) tools: 
 - Access to a newly installed cluster or sufficient access to a platfor to setup a new OpenShift cluster
-- Setup a [sealed secret certificate](https://github.com/bitnami-labs/sealed-secrets/blob/main/docs/bring-your-own-certificates.md) 
+- Setup a [sealed secret certificate](https://github.com/bitnami-labs/sealed-secrets/blob/main/docs/bring-your-own-certificates.md) - [Sample Demo secret](https://bit.ly/demo-sealed-master)
 
 GIT Personal Access Token and GitHub Organization instruction can be read at [Personal Access Token](https://pages.github.ibm.com/cloudpakbringup/production-deployment-guides/snippets/gitops-cluster-prereq/#create-a-git-personal-access-token-pat) and [GitHub Organization](https://pages.github.ibm.com/cloudpakbringup/production-deployment-guides/snippets/gitops-cluster-prereq/#create-a-custom-git-organization).
 
@@ -50,4 +51,88 @@ echo $GITHUB_TOKEN | gh auth login --with-token
 ./cloudpak-quickstart/scripts/quickstart.sh
 ```
 
-**Note**: you must either supply the `install-config.yaml` in the $SOURCE_DIR or set that you already login to the cluster using `oc login` command. 
+## Example for Fyre to install ACE Quick-Start
+
+This flow assumes that you have Fyre-based OpenShift cluster that you already initialized with OpenShift Data Foundation storage.
+
+1. Authenticate to OpenShift
+
+    ```bash
+    oc login -u kubeadmin -p ${password} api.${clustername}.cp.fyre.ibm.com:6443 --insecure-skip-tls-verify
+    ```
+
+2. Setup environment variables
+
+    ```bash
+    mkdir ${clustername}
+    cd ${clustername}
+    cp ~/Downloads/sealed-secret.yaml ss.yaml
+
+    export SOURCE_DIR=$(pwd)
+    export GITHUB_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
+    export GIT_USER="gituser"
+    export GIT_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
+    export GIT_ORG="git_organization"
+    export SEALED_SECRET_KEY_FILE=./ss.yaml
+    export OUTPUT_DIR="gitops"
+    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
+    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
+    ## component switches
+    export ADD_ACE="yes"
+    export ADD_ACEAPPS="yes"
+    ```
+3. Run script
+
+    ```bash
+    git clone https://github.com/vbudi000/cloudpak-quickstart.git
+    echo $GIT_TOKEN | gh auth login --with-token
+    ./cloudpak-quickstart/scripts/quickstart.sh
+    ```
+
+## Example to initialize an AWS cluster with MQ Quick-Start
+
+This flow assumes you have setup your AWS account for CLI access and have a public Route53 hosted zone.
+
+1. Create your install-config.yaml file:
+
+    ```bash
+    mkdir ${clustername}
+    cd ${clustername}
+    cp ~/Downloads/sealed-secret.yaml ss.yaml
+
+    openshift-install create install-config
+    ```
+
+2. You may update your install-config.yaml file according to the [Production Guide](https://pages.github.ibm.com/cloudpakbringup/production-deployment-guide/infrastructure/aws/). Then save your install-config.yaml so you can refer back to it.
+
+    ```bash
+    cp install-config.yaml install-config.yaml.backup
+    ```
+
+3. Setup environment variables
+
+    ```bash
+    export AWS_ACCESS_KEY_ID="aws_iam_id"
+    export AWS_SECRET_ACCESS_KEY="aws_secret_access_key"
+    export AWS_DEFAULT_REGION="us-east-2"
+
+    export SOURCE_DIR=$(pwd)
+    export GITHUB_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
+    export GIT_USER="gituser"
+    export GIT_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
+    export GIT_ORG="git_organization"
+    export SEALED_SECRET_KEY_FILE=./ss.yaml
+    export OUTPUT_DIR="gitops"
+    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
+    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
+    ## component switches
+    export ADD_MQ="yes"
+    export ADD_MQAPPS="yes"
+    ```
+4. Run the script
+
+    ```bash
+    git clone https://github.com/vbudi000/cloudpak-quickstart.git
+    echo $GIT_TOKEN | gh auth login --with-token
+    ./cloudpak-quickstart/scripts/quickstart.sh
+    ```
