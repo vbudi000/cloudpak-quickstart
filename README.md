@@ -99,7 +99,10 @@ This flow assumes you have setup your AWS account for CLI access and have a publ
     mkdir ${clustername}
     cd ${clustername}
     cp ~/Downloads/sealed-secret.yaml ss.yaml
-
+    
+    export AWS_ACCESS_KEY_ID="aws_iam_id"
+    export AWS_SECRET_ACCESS_KEY="aws_secret_access_key"
+    export AWS_DEFAULT_REGION="us-east-2"
     openshift-install create install-config
     ```
 
@@ -112,10 +115,6 @@ This flow assumes you have setup your AWS account for CLI access and have a publ
 3. Setup environment variables
 
     ```bash
-    export AWS_ACCESS_KEY_ID="aws_iam_id"
-    export AWS_SECRET_ACCESS_KEY="aws_secret_access_key"
-    export AWS_DEFAULT_REGION="us-east-2"
-
     export SOURCE_DIR=$(pwd)
     export GITHUB_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
     export GIT_USER="gituser"
