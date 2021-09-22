@@ -241,19 +241,30 @@ apply_mqapps_recipe() {
         cnt=$(oc get pipelines -n ci | grep "mq-infra-dev" | wc -l)
     done
     echo ""
-    
+    sleep 30
+
     echo -e "${WHITE}Preparing Tekton pipelines${NC}"
     
     piperun=$(tkn pipeline start mq-infra-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-infra.git" | grep pipelinerun)
     infra-plrun=$(echo $piperun | cut -d" " -f4)
     $piperun >> mq-infra.log
-    
-    oc get pipelinerun -n ci
+    pipestat=$(oc get pipelinerun $infra-plrun -n ci --no-header | cut -d" " -f7)
+
+    if [[ $pipestat != "Succeeded" ]]; then
+        oc get pipelinerun $infra-plrun -n ci
+        return
+    fi
     
     piperun=$(tkn pipeline start mq-spring-app-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-spring-app.git" | grep pipelinerun)
     app-plrun=$(echo $piperun | cut -d" " -f4)
     $piperun >> mq-spring-app.log
-    
+    pipestat=$(oc get pipelinerun $app-plrun -n ci --no-header | cut -d" " -f7)
+
+    if [[ $pipestat != "Succeeded" ]]; then
+        oc get pipelinerun $app-plrun -n ci
+        return
+    fi
+
     oc get pipelinerun -n ci
    
 }
@@ -320,10 +331,11 @@ apply_aceapps_recipe() {
         cnt=$(oc get pipelines -n ci | grep "ace-build-bar-promote-dev" | wc -l)
     done
     echo ""
+    sleep 30
     
     piperun=$(tkn pipeline start ace-build-bar-promote-dev -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p is-source-revision="master" --workspace name=shared-workspace,claimName=ace-bar-pvc  | grep pipelinerun) 
     plrun=$(echo $piperun | cut -d" " -f4)
-    $piperun
+    $piperun > ace-build-bar-promote-dev.log
     
     pipestat=$(oc get pipelinerun $plrun -n ci --no-header | cut -d" " -f7)
 
@@ -335,7 +347,7 @@ apply_aceapps_recipe() {
 
     piperun=$(tkn pipeline start ace-promote-dev-stage -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p source-env="dev" -p destination-env="staging" --workspace name=shared-workspace,claimName=ace-test-pvc  | grep pipelinerun) 
     plrun=$(echo $piperun | cut -d" " -f4)
-    $piperun
+    $piperun > ace-promote-dev-stage.log
     
     if [[ $pipestat != "Succeeded" ]]; then
         oc get pipelinerun $plrun -n ci
