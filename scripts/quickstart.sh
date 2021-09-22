@@ -234,31 +234,31 @@ apply_mqapps_recipe() {
     
     echo -e "${WHITE}Preparing Tekton pipelines${NC}"
     set +e
-    cnt=$(oc get pipelines -n ci | grep "mq-infra-dev" | wc -l)
+    cnt=$(oc get pipelines -n ci 2>/dev/null | grep "mq-infra-dev" | wc -l)
     while [ $cnt -eq 0 ]; do
         sleep 5
         echo -n "."
-        cnt=$(oc get pipelines -n ci | grep "mq-infra-dev" | wc -l)
+        cnt=$(oc get pipelines -n ci 2>/dev/null  | grep "mq-infra-dev" | wc -l)
     done
     echo ""
     sleep 30
 
     echo -e "${WHITE}Preparing Tekton pipelines${NC}"
     
-    piperun=$(tkn pipeline start mq-infra-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-infra.git" | grep pipelinerun)
+    piperun=$(tkn pipeline start mq-infra-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-infra.git" 2>/dev/null | grep pipelinerun)
     infra-plrun=$(echo $piperun | cut -d" " -f4)
-    $piperun >> mq-infra.log
-    pipestat=$(oc get pipelinerun $infra-plrun -n ci --no-header | cut -d" " -f7)
+    $piperun 2>/dev/null  >> mq-infra.log
+    pipestat=$(oc get pipelinerun $infra-plrun -n ci --no-headers | cut -d" " -f7)
 
     if [[ $pipestat != "Succeeded" ]]; then
         oc get pipelinerun $infra-plrun -n ci
         return
     fi
     
-    piperun=$(tkn pipeline start mq-spring-app-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-spring-app.git" | grep pipelinerun)
+    piperun=$(tkn pipeline start mq-spring-app-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-spring-app.git" 2>/dev/null | grep pipelinerun)
     app-plrun=$(echo $piperun | cut -d" " -f4)
-    $piperun >> mq-spring-app.log
-    pipestat=$(oc get pipelinerun $app-plrun -n ci --no-header | cut -d" " -f7)
+    $piperun 2>/dev/null >> mq-spring-app.log
+    pipestat=$(oc get pipelinerun $app-plrun -n ci --no-headers | cut -d" " -f7)
 
     if [[ $pipestat != "Succeeded" ]]; then
         oc get pipelinerun $app-plrun -n ci
@@ -324,20 +324,20 @@ apply_aceapps_recipe() {
     
     echo -e "${WHITE}Preparing Tekton pipelines${NC}"
     set +e
-    cnt=$(oc get pipelines -n ci | grep "ace-build-bar-promote-dev" | wc -l)
+    cnt=$(oc get pipelines -n ci 2>/dev/null | grep "ace-build-bar-promote-dev" | wc -l)
     while [ $cnt -eq 0 ]; do
         sleep 5
         echo -n "."
-        cnt=$(oc get pipelines -n ci | grep "ace-build-bar-promote-dev" | wc -l)
+        cnt=$(oc get pipelines -n ci 2>/dev/null | grep "ace-build-bar-promote-dev" | wc -l)
     done
     echo ""
     sleep 30
     
     piperun=$(tkn pipeline start ace-build-bar-promote-dev -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p is-source-revision="master" --workspace name=shared-workspace,claimName=ace-bar-pvc  | grep pipelinerun) 
     plrun=$(echo $piperun | cut -d" " -f4)
-    $piperun > ace-build-bar-promote-dev.log
+    $piperun 2>/dev/null  >> ace-build-bar-promote-dev.log
     
-    pipestat=$(oc get pipelinerun $plrun -n ci --no-header | cut -d" " -f7)
+    pipestat=$(oc get pipelinerun $plrun -n ci --no-headers | cut -d" " -f7)
 
     if [[ $pipestat != "Succeeded" ]]; then
         oc get pipelinerun $plrun -n ci
@@ -347,8 +347,10 @@ apply_aceapps_recipe() {
 
     piperun=$(tkn pipeline start ace-promote-dev-stage -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p source-env="dev" -p destination-env="staging" --workspace name=shared-workspace,claimName=ace-test-pvc  | grep pipelinerun) 
     plrun=$(echo $piperun | cut -d" " -f4)
-    $piperun > ace-promote-dev-stage.log
-    
+    $piperun 2>/dev/null >> ace-promote-dev-stage.log
+
+    pipestat=$(oc get pipelinerun $plrun -n ci --no-headers | cut -d" " -f7)
+
     if [[ $pipestat != "Succeeded" ]]; then
         oc get pipelinerun $plrun -n ci
         return
