@@ -99,7 +99,7 @@ This flow assumes you have setup your AWS account for CLI access and have a publ
     mkdir ${clustername}
     cd ${clustername}
     cp ~/Downloads/sealed-secret.yaml ss.yaml
-    
+
     export AWS_ACCESS_KEY_ID="aws_iam_id"
     export AWS_SECRET_ACCESS_KEY="aws_secret_access_key"
     export AWS_DEFAULT_REGION="us-east-2"
@@ -135,3 +135,42 @@ This flow assumes you have setup your AWS account for CLI access and have a publ
     echo $GIT_TOKEN | gh auth login --with-token
     ./cloudpak-quickstart/scripts/quickstart.sh
     ```
+
+## Using the startqs invoker
+
+You can initiate the script using the following procedure, on a working directory that is not under git, download `startqs.sh`:
+
+```bash
+curl -sfL https://raw.githubusercontent.com/vbudi000/cloudpak-quickstart/master/startqs.sh > startqs.sh
+```
+
+Edit the environment parameters section of the downloaded script:
+
+```bash
+###########################################################
+# Change the following environment variables
+###########################################################
+export GIT_USER="gituser"
+export GITHUB_TOKEN="ghp_key"
+export GIT_ORG="git-org"
+export IBM_ENTITLEMENT_KEY="entitlement-key"
+export SEALED_SECRET_KEY_FILE=./shared-secret.yaml
+export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
+###########################################################
+# Start deployment of Quick Start - pick and choose the components to enable
+###########################################################
+export ADD_INFRA=yes
+export ADD_MQ=yes
+export ADD_MQAPPS=yes
+export ADD_ACE=yes
+export ADD_ACEAPPS=yes
+###########################################################
+# End environment variable changes
+###########################################################
+```
+
+Either provide the OpenShift environment using `oc login` or create `install-config.yaml` file in the directory and invoke the script 
+
+```bash
+bash startqs.sh
+```
