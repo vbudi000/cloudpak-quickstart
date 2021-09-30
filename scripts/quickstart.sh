@@ -361,7 +361,7 @@ apply_aceapps_recipe() {
 
 # Specific components - enabled using ENVIRONMENT variable
 apply_apic_recipe() {
-    echo -e "${WHITE}Applying MQ recipe${NC}"
+    echo -e "${WHITE}Applying APIC recipe${NC}"
     
     pushd ${OUTPUT_DIR}/gitops-0-bootstrap
     
