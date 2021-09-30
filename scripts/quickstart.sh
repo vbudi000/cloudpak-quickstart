@@ -359,6 +359,31 @@ apply_aceapps_recipe() {
 
 }
 
+# Specific components - enabled using ENVIRONMENT variable
+apply_apic_recipe() {
+    echo -e "${WHITE}Applying MQ recipe${NC}"
+    
+    pushd ${OUTPUT_DIR}/gitops-0-bootstrap
+    
+    source ${SCRIPTDIR}/recipe-mq.sh
+    
+    popd
+    
+    echo -e -n "${WHITE}Waiting till ${LBLUE}API Connect cluser${WHITE} route is Ready ${NC}"
+    cnt=$(oc get APIConnectCluster apic-cluster -n tools -o=jsonpath='{.status.phase}')
+    while [ "$cnt" != "Ready" ]; do
+        sleep 60
+        echo -n "."
+        cnt=$(oc get APIConnectCluster apic-cluster -n tools -o=jsonpath='{.status.phase}')
+    done
+    echo ""
+    
+    oc get APIConnectCluster apic-cluster -n tools
+    echo -e "${WHITE}APIC recipe ready${NC}"
+    
+}
+
+
 if [ -f "${SOURCE_DIR}/install-config.yaml" ]; then
     echo "The install-config.yaml is found"
     create_cluster
@@ -392,6 +417,13 @@ if [[ "${ADD_ACE}" == "yes" ]]; then
     apply_ace_recipe
     if [[ "${ADD_ACEAPPS}" == "yes" ]]; then 
         apply_aceapps_recipe
+    fi
+fi
+
+if [[ "${ADD_APIC}" == "yes" ]]; then 
+    apply_apic_recipe
+    if [[ "${ADD_APICAPPS}" == "yes" ]]; then 
+        apply_apicapps_recipe
     fi
 fi
 

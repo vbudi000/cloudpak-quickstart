@@ -24,6 +24,7 @@ export ADD_MQ=yes
 export ADD_MQAPPS=yes
 export ADD_ACE=yes
 export ADD_ACEAPPS=yes
+export ADD_APIC=yes
 ###########################################################
 # End environment variable changes
 ###########################################################
