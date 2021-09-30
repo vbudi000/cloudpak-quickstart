@@ -365,11 +365,12 @@ apply_apic_recipe() {
     
     pushd ${OUTPUT_DIR}/gitops-0-bootstrap
     
-    source ${SCRIPTDIR}/recipe-mq.sh
+    source ${SCRIPTDIR}/recipe-apic.sh
     
     popd
     
-    echo -e -n "${WHITE}Waiting till ${LBLUE}API Connect cluser${WHITE} route is Ready ${NC}"
+    sleep 60
+    echo -e -n "${WHITE}Waiting till ${LBLUE}API Connect cluser${WHITE} is Ready ${NC}"
     cnt=$(oc get APIConnectCluster apic-cluster -n tools -o=jsonpath='{.status.phase}')
     while [ "$cnt" != "Ready" ]; do
         sleep 60
