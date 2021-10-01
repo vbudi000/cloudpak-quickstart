@@ -146,7 +146,7 @@ curl -sfL https://raw.githubusercontent.com/vbudi000/cloudpak-quickstart/master/
 
 Edit the environment parameters section of the downloaded script:
 
-```bash
+```bash 
 ###########################################################
 # Change the following environment variables
 ###########################################################
@@ -164,6 +164,7 @@ export ADD_MQ=yes
 export ADD_MQAPPS=yes
 export ADD_ACE=yes
 export ADD_ACEAPPS=yes
+export ADD_APIC=yes
 ###########################################################
 # End environment variable changes
 ###########################################################
