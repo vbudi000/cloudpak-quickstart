@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
 
@@ -78,4 +78,4 @@ echo -e "${WHITE}CP4D recipe ready${NC} login at ${WHITE}https://${zenURL}${NC} 
 echo -e "The admin password is:"
 oc -n tools extract secret/admin-user-details --keys=initial_admin_password --to=-
 
-echo -e -n "${WHITE}Completed CP4D recipe${NC}"
+echo -e "${WHITE}Completed CP4D recipe${NC}"
