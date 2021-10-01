@@ -1,7 +1,7 @@
 #!/bin/bash
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
-source scripts/prep.sh
+source cloudpak-quickstart/scripts/prep.sh
 echo -e "${WHITE}Applying APIC recipe${NC}"
 
 pushd ${OUTPUT_DIR}/gitops-0-bootstrap

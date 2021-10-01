@@ -206,15 +206,34 @@ apply_apic_recipe() {
     source ${SCRIPTDIR}/recipe-apic.sh
 }
 
+apply_apicapps_recipe() {
+    echo "TBD ${WHITE} Not implemented ${NC}"
+}
+
 apply_cpd_recipe() {
     source ${SCRIPTDIR}/recipe-cp4d.sh
 }
 
 apply_cpdsample_recipe() {
     # source ${SCRIPTDIR}/recipe-cp4dsample.sh
-    echo "TBD"
+    echo "TBD ${WHITE} Not implemented ${NC}"
 }
 
+apply_procmining_recipe() {
+    echo "TBD ${WHITE} Not implemented ${NC}"
+}
+
+apply_procminingapps_recipe() {
+    echo "TBD ${WHITE} Not implemented ${NC}"
+}
+
+apply_ads_recipe() {
+    echo "TBD ${WHITE} Not implemented ${NC}"
+}
+
+apply_adsapps_recipe() {
+    echo "TBD ${WHITE} Not implemented ${NC}"
+}
 
 if [ -f "${SOURCE_DIR}/install-config.yaml" ]; then
     echo "The install-config.yaml is found"
@@ -254,15 +273,31 @@ fi
 
 if [[ "${ADD_APIC}" == "yes" ]]; then
     apply_apic_recipe
-    if [[ "${ADD_APICAPPS}" == "yes" ]]; then
-        apply_apicapps_recipe
-    fi
+    #if [[ "${ADD_APICAPPS}" == "yes" ]]; then
+    #    apply_apicapps_recipe
+    #fi
 fi
 
 if [[ "${ADD_CPD}" == "yes" ]]; then
     apply_cpd_recipe
     #if [[ "${ADD_CPDSAMPLE}" == "yes" ]]; then
     #    apply_cpdsample_recipe
+    #fi
+fi
+
+
+if [[ "${ADD_PROCMINING}" == "yes" ]]; then
+    apply_procmining_recipe
+    #if [[ "${ADD_PROCMININGAPPS}" == "yes" ]]; then
+    #    apply_procminingapps_recipe
+    #fi
+fi
+
+
+if [[ "${ADD_ADS}" == "yes" ]]; then
+    apply_ads_recipe
+    #if [[ "${ADD_ADSAPPS}" == "yes" ]]; then
+    #    apply_adsapps_recipe
     #fi
 fi
 
