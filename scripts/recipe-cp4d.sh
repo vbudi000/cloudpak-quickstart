@@ -54,7 +54,7 @@ popd
 
 pushd ${OUTPUT_DIR}/gitops-2-services
 
-sed -i.bak 's/ibmc-file-gold-gid    /'${RWX_STORAGECLASS}'/g' instances/ibm-cpd-instance/ibmcpd-instance.yaml
+sed -i.bak 's/ibmc-file-gold-gid/'${RWX_STORAGECLASS}'/g' instances/ibm-cpd-instance/ibmcpd-instance.yaml
 rm instances/ibm-cpd-instance/ibmcpd-instance.yaml.bak
 
 git add .
