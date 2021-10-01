@@ -206,6 +206,14 @@ apply_apic_recipe() {
     source ${SCRIPTDIR}/recipe-apic.sh
 }
 
+apply_cpd_recipe() {
+    source ${SCRIPTDIR}/recipe-cp4d.sh
+}
+
+apply_cpdsample_recipe() {
+    # source ${SCRIPTDIR}/recipe-cp4dsample.sh
+}
+
 
 if [ -f "${SOURCE_DIR}/install-config.yaml" ]; then
     echo "The install-config.yaml is found"
@@ -248,6 +256,13 @@ if [[ "${ADD_APIC}" == "yes" ]]; then
     if [[ "${ADD_APICAPPS}" == "yes" ]]; then
         apply_apicapps_recipe
     fi
+fi
+
+if [[ "${ADD_CPD}" == "yes" ]]; then
+    apply_cpd_recipe
+    #if [[ "${ADD_CPDSAMPLE}" == "yes" ]]; then
+    #    apply_cpdsample_recipe
+    #fi
 fi
 
 popd
