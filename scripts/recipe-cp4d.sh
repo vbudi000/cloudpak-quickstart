@@ -66,7 +66,7 @@ popd
 echo -e -n "${WHITE}Waiting till ${LBLUE}CP4D ZenService${WHITE} is ready ${NC}"
 sleep 20
 cnt=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.zenStatus}")
-while [[]"$cnt" != "Ready" ]; do
+while [[ "$cnt" != "Ready" ]]; do
     sleep 60
     echo -n "."
     cnt=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.zenStatus}")
