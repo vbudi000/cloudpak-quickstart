@@ -44,16 +44,19 @@ git add .
 git commit -m "Adding CPD resources"
 git push origin
 
-echo -e -n "${WHITE}Waiting till ${LBLUE} -- ${WHITE} ${NC}"
-cnt=$(echo "0")
-while [ $cnt -eq 0 ]; do
+echo -e -n "${WHITE}Waiting till ${LBLUE}CP4D ZenService${WHITE} is ready ${NC}"
+sleep 20
+cnt=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.zenStatus}")
+while [[]"$cnt" != "Ready" ]; do
     sleep 60
     echo -n "."
-    cnt=$(echo "1")
+    cnt=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.zenStatus}")
 done
 echo ""
 
-oc get route -n tools integration-navigator-pn
-echo -e "${WHITE}CP4D recipe ready${NC}"
+zenURL=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.url}")
+echo -e "${WHITE}CP4D recipe ready${NC} login at ${WHITE}https://${zenURL}${NC} "
+echo -e "The admin password is:"
+oc -n tools extract secret/admin-user-details --keys=initial_admin_password --to=-
 
 popd
