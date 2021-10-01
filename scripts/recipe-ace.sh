@@ -1,16 +1,21 @@
 #!/bin/bash
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
+
+source prep.sh
+echo -e "${WHITE}Applying ACE recipe${NC}"
+
+pushd ${OUTPUT_DIR}/gitops-0-bootstrap
 echo "Enable ACE services"
 
 if [[ -z ${RWX_STORAGECLASS} ]]; then
-  echo "the MQ recipe needed a Storage Class with RWX access mode"
-  echo "RWX_STORAGECLASS=ocs-storagecluster-cephfs $0"
-  exit 1
+    echo "the MQ recipe needed a Storage Class with RWX access mode"
+    echo "RWX_STORAGECLASS=ocs-storagecluster-cephfs $0"
+    exit 1
 fi
 
 if [ -d "0-bootstrap/single-cluster" ]; then
-    echo "Running from gitops-0-bootstrap" 
+    echo "Running from gitops-0-bootstrap"
 else
     echo "You should run this recipe script from the gitops-0-bootstrap directory"
     exit 1
@@ -54,3 +59,16 @@ git add .
 git commit -m "Adding ACE resources"
 git push origin
 
+popd
+
+echo -e -n "${WHITE}Waiting till ${LBLUE}integration-navigator-pn${WHITE} route is available ${NC}"
+cnt=$(oc get route -n tools 2>/dev/null | grep "integration-navigator-pn" | wc -l)
+while [ $cnt -eq 0 ]; do
+    sleep 60
+    echo -n "."
+    cnt=$(oc get route -n tools 2>/dev/null  | grep "integration-navigator-pn" | wc -l)
+done
+echo ""
+
+oc get route -n tools integration-navigator-pn
+echo -e "${WHITE}ACE recipe ready${NC}"

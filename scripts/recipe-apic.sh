@@ -1,16 +1,21 @@
 #!/bin/bash
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
+source prep.sh
+echo -e "${WHITE}Applying APIC recipe${NC}"
+
+pushd ${OUTPUT_DIR}/gitops-0-bootstrap
+
 echo "Enable APIC services"
 
 if [[ -z ${RWX_STORAGECLASS} ]]; then
-  echo "the APIC recipe needed a Storage Class with RWX access mode"
-  echo "RWX_STORAGECLASS=ocs-storagecluster-cephfs $0"
-  exit 1
+    echo "the APIC recipe needed a Storage Class with RWX access mode"
+    echo "RWX_STORAGECLASS=ocs-storagecluster-cephfs $0"
+    exit 1
 fi
 
 if [ -d "0-bootstrap/single-cluster" ]; then
-    echo "Running from gitops-0-bootstrap" 
+    echo "Running from gitops-0-bootstrap"
 else
     echo "You should run this recipe script from the gitops-0-bootstrap directory"
     exit 1
@@ -48,3 +53,18 @@ git add .
 git commit -m "Adding APIC resources"
 git push origin
 
+
+popd
+
+sleep 60
+echo -e -n "${WHITE}Waiting till ${LBLUE}API Connect cluser${WHITE} is Ready ${NC}"
+cnt=$(oc get APIConnectCluster apic-cluster -n tools -o=jsonpath='{.status.phase}' 2>/dev/null)
+while [ "$cnt" != "Ready" ]; do
+    sleep 60
+    echo -n "."
+    cnt=$(oc get APIConnectCluster apic-cluster -n tools -o=jsonpath='{.status.phase}' 2>/dev/null)
+done
+echo ""
+
+oc get APIConnectCluster apic-cluster -n tools
+echo -e "${WHITE}APIC recipe ready${NC}"
