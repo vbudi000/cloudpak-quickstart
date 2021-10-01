@@ -2,7 +2,7 @@
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
 
-source prep.sh
+source scripts/prep.sh
 echo -e "${WHITE}Applying ACE recipe${NC}"
 
 pushd ${OUTPUT_DIR}/gitops-0-bootstrap
@@ -24,10 +24,6 @@ fi
 cat > infra-recipe <<EOF
 consolenotification.yaml
 namespace-ibm-common-services.yaml
-namespace-ci.yaml
-namespace-dev.yaml
-namespace-staging.yaml
-namespace-prod.yaml
 namespace-sealed-secrets.yaml
 namespace-tools.yaml
 EOF

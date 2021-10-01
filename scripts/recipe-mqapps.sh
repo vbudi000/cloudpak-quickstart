@@ -2,7 +2,7 @@
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
 
-source prep.sh
+source scripts/prep.sh
 
 echo -e "${WHITE}Preparing mq-apps recipe${NC}"
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Applying recipes on the primary repo
 # Assumption: running from gitops-0-bootstrap; with gh auth login
-source prep.sh
+source scripts/prep.sh
 echo -e "${WHITE}Preparing ACE-apps recipe${NC}"
 
 pushd ${OUTPUT_DIR}/gitops-0-bootstrap
@@ -15,6 +15,13 @@ else
     exit 1
 fi
 
+cat > infra-recipe <<EOF
+namespace-ci.yaml
+namespace-dev.yaml
+namespace-staging.yaml
+namespace-prod.yaml
+EOF
+
 #cat > services-recipe <<EOF
 #artifactory.yaml
 #sonarqube.yaml
@@ -27,6 +34,9 @@ argocd\/ace\/dev.yaml
 argocd\/ace\/stage.yaml
 argocd\/soapserver\/soapserver.yaml
 EOF
+
+cat infra-recipe | awk '{print "sed -i.bak '\''/"$1"/s/^#//g'\'' 0-bootstrap/single-cluster/1-infra/kustomization.yaml" }' | bash
+rm 0-bootstrap/single-cluster/1-infra/kustomization.yaml.bak
 
 #cat services-recipe | awk '{print "sed -i.bak '\''/"$1"/s/^#//g'\'' 0-bootstrap/single-cluster/2-services/kustomization.yaml" }' | bash
 #rm 0-bootstrap/single-cluster/2-services/kustomization.yaml.bak
