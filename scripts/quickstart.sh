@@ -212,6 +212,7 @@ apply_cpd_recipe() {
 
 apply_cpdsample_recipe() {
     # source ${SCRIPTDIR}/recipe-cp4dsample.sh
+    echo "TBD"
 }
 
 
