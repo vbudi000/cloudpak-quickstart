@@ -15,6 +15,12 @@ else
     exit 1
 fi
 
+if [[ -z ${RWX_STORAGECLASS} ]]; then
+    echo "the CP4D recipe needed a Storage Class with RWX access mode"
+    echo "RWX_STORAGECLASS=ocs-storagecluster-cephfs $0"
+    exit 1
+fi
+
 cat > infra-recipe <<EOF
 consolenotification.yaml
 namespace-ibm-common-services.yaml
@@ -44,6 +50,19 @@ git add .
 git commit -m "Adding CPD resources"
 git push origin
 
+popd
+
+pushd ${OUTPUT_DIR}/gitops-2-services
+
+sed -i.bak 's/ibmc-file-gold-gid    /'${RWX_STORAGECLASS}'/g' instances/ibm-cpd-instance/ibmcpd-instance.yaml
+rm instances/ibm-cpd-instance/ibmcpd-instance.yaml.bak
+
+git add .
+git commit -m "Adding CPD resources - changing storageClass"
+git push origin
+
+popd
+
 echo -e -n "${WHITE}Waiting till ${LBLUE}CP4D ZenService${WHITE} is ready ${NC}"
 sleep 20
 cnt=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.zenStatus}")
@@ -59,4 +78,4 @@ echo -e "${WHITE}CP4D recipe ready${NC} login at ${WHITE}https://${zenURL}${NC} 
 echo -e "The admin password is:"
 oc -n tools extract secret/admin-user-details --keys=initial_admin_password --to=-
 
-popd
+echo -e -n "${WHITE}Completed CP4D recipe${NC}"
