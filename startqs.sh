@@ -26,6 +26,7 @@ export ADD_ACE=yes
 export ADD_ACEAPPS=yes
 export ADD_APIC=yes
 export ADD_CPD=yes
+export ADD_PROCMINING=yes
 ###########################################################
 # End environment variable changes
 ###########################################################

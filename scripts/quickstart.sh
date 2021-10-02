@@ -220,7 +220,7 @@ apply_cpdsample_recipe() {
 }
 
 apply_procmining_recipe() {
-    echo "TBD ${WHITE} Not implemented ${NC}"
+    source ${SCRIPTDIR}/recipe-procmining.sh
 }
 
 apply_procminingapps_recipe() {
