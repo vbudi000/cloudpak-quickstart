@@ -51,3 +51,14 @@ git commit -m "Adding Process Mining resources"
 git push origin
 
 popd
+
+echo -e -n "${WHITE}Waiting till ${LBLUE}Process mining${WHITE} is available ${NC}"
+pmuri=$( oc get processmining -n tools processmining -o jsonpath='{.status.components.processmining.endpoints[0].uri}' 2>/dev/null)
+while [[ $pmuri == "" ]]; do
+    sleep 60
+    echo -n "."
+    pmuri=$( oc get processmining -n tools processmining -o jsonpath='{.status.components.processmining.endpoints[0].uri}' 2>/dev/null)
+done
+echo ""
+
+echo -e "${WHITE}Process Mining is ready at recipe ready at ${LBLUE}https://{pmuri}${NC}"
