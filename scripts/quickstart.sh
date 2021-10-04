@@ -164,6 +164,7 @@ create_infra_components() {
     echo ""
     
     oc get machines -n openshift-machine-api
+    oc get nodes
     echo -e "${WHITE}Infrastructure and Storage nodes are Ready${NC}"
     
 }
