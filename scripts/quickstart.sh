@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source prep.sh
+source cloudpak-quickstart/scripts/prep.sh
 
 ## Set environment variables
 if [[ -z ${SOURCE_DIR} ]]; then
@@ -234,6 +234,10 @@ apply_ads_recipe() {
 apply_adsapps_recipe() {
     echo "TBD ${WHITE} Not implemented ${NC}"
 }
+
+###############################################################################
+# Begin main program 
+###############################################################################
 
 if [ -f "${SOURCE_DIR}/install-config.yaml" ]; then
     echo "The install-config.yaml is found"
