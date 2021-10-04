@@ -96,6 +96,9 @@ Either provide the OpenShift environment using `oc login` or create `install-con
 bash startqs.sh
 ```
 
-See [![asciicast](https://asciinema.org/a/439530.svg)](https://asciinema.org/a/439530)
+See it in action:
 
-<script id="asciicast-439530" src="https://asciinema.org/a/439530.js" async></script>
+- App Connect Enterprise sample [![asciicast](https://asciinema.org/a/439530.svg)](https://asciinema.org/a/439530)
+- Process Mining sample [![asciicast](https://asciinema.org/a/439944.svg)](https://asciinema.org/a/439944)
+- IBM Cloud Pak for Data sample [![asciicast](https://asciinema.org/a/439439.svg)](https://asciinema.org/a/439439)
+- MQ sample (older version) [![asciicast](https://asciinema.org/a/435864.svg)](https://asciinema.org/a/435864)
