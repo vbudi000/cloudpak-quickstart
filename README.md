@@ -41,6 +41,9 @@ export ADD_MQ="yes"
 export ADD_MQAPPS="yes" 
 export ADD_ACE="yes"
 export ADD_ACEAPPS="yes"
+export ADD_APIC="yes
+export ADD_CPD="yes"
+export ADD_PROCMINING="yes"
 ```
 
 Run the quickstart program
@@ -50,91 +53,6 @@ git clone https://github.com/vbudi000/cloudpak-quickstart
 echo $GITHUB_TOKEN | gh auth login --with-token
 ./cloudpak-quickstart/scripts/quickstart.sh
 ```
-
-## Example for Fyre to install ACE Quick-Start
-
-This flow assumes that you have Fyre-based OpenShift cluster that you already initialized with OpenShift Data Foundation storage.
-
-1. Authenticate to OpenShift
-
-    ```bash
-    oc login -u kubeadmin -p ${password} api.${clustername}.cp.fyre.ibm.com:6443 --insecure-skip-tls-verify
-    ```
-
-2. Setup environment variables
-
-    ```bash
-    mkdir ${clustername}
-    cd ${clustername}
-    cp ~/Downloads/sealed-secret.yaml ss.yaml
-
-    export SOURCE_DIR=$(pwd)
-    export GITHUB_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
-    export GIT_USER="gituser"
-    export GIT_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
-    export GIT_ORG="git_organization"
-    export SEALED_SECRET_KEY_FILE=./ss.yaml
-    export OUTPUT_DIR="gitops"
-    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
-    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
-    ## component switches
-    export ADD_ACE="yes"
-    export ADD_ACEAPPS="yes"
-    ```
-3. Run script
-
-    ```bash
-    git clone https://github.com/vbudi000/cloudpak-quickstart.git
-    echo $GIT_TOKEN | gh auth login --with-token
-    ./cloudpak-quickstart/scripts/quickstart.sh
-    ```
-
-## Example to initialize an AWS cluster with MQ Quick-Start
-
-This flow assumes you have setup your AWS account for CLI access and have a public Route53 hosted zone.
-
-1. Create your install-config.yaml file:
-
-    ```bash
-    mkdir ${clustername}
-    cd ${clustername}
-    cp ~/Downloads/sealed-secret.yaml ss.yaml
-
-    export AWS_ACCESS_KEY_ID="aws_iam_id"
-    export AWS_SECRET_ACCESS_KEY="aws_secret_access_key"
-    export AWS_DEFAULT_REGION="us-east-2"
-    openshift-install create install-config
-    ```
-
-2. You may update your install-config.yaml file according to the [Production Guide](https://pages.github.ibm.com/cloudpakbringup/production-deployment-guide/infrastructure/aws/). Then save your install-config.yaml so you can refer back to it.
-
-    ```bash
-    cp install-config.yaml install-config.yaml.backup
-    ```
-
-3. Setup environment variables
-
-    ```bash
-    export SOURCE_DIR=$(pwd)
-    export GITHUB_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
-    export GIT_USER="gituser"
-    export GIT_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
-    export GIT_ORG="git_organization"
-    export SEALED_SECRET_KEY_FILE=./ss.yaml
-    export OUTPUT_DIR="gitops"
-    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
-    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
-    ## component switches
-    export ADD_MQ="yes"
-    export ADD_MQAPPS="yes"
-    ```
-4. Run the script
-
-    ```bash
-    git clone https://github.com/vbudi000/cloudpak-quickstart.git
-    echo $GIT_TOKEN | gh auth login --with-token
-    ./cloudpak-quickstart/scripts/quickstart.sh
-    ```
 
 ## Using the startqs invoker
 
@@ -165,6 +83,8 @@ export ADD_MQAPPS=yes
 export ADD_ACE=yes
 export ADD_ACEAPPS=yes
 export ADD_APIC=yes
+export ADD_CPD=yes
+export ADD_PROCMINING=yes
 ###########################################################
 # End environment variable changes
 ###########################################################
@@ -175,3 +95,7 @@ Either provide the OpenShift environment using `oc login` or create `install-con
 ```bash
 bash startqs.sh
 ```
+
+See [![asciicast](https://asciinema.org/a/439530.svg)](https://asciinema.org/a/439530)
+
+<script id="asciicast-439530" src="https://asciinema.org/a/439530.js" async></script>
