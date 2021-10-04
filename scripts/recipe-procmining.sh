@@ -61,4 +61,4 @@ while [[ $pmuri == "" ]]; do
 done
 echo ""
 
-echo -e "${WHITE}Process Mining is ready at recipe ready at ${LBLUE}https://{pmuri}${NC}"
+echo -e "${WHITE}Process Mining is ready at ${LBLUE}https://${pmuri}${NC}"
