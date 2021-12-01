@@ -17,6 +17,7 @@ else
     pushd ${SOURCE_DIR}
 fi
 
+CP_EXAMPLE=true
 CP_DEFAULT_TARGET_NAMESPACE=${CP_DEFAULT_TARGET_NAMESPACE:-tools}
 GITOPS_PROFILE=${GITOPS_PROFILE:-0-bootstrap/single-cluster}
 GIT_BRANCH=${GIT_BRANCH:-master}
@@ -128,7 +129,7 @@ fork_repos() {
 
 run_bootstrap() {
     echo -e "${WHITE}Invoking bootstrap script${NC}"
-    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} OUTPUT_DIR=${OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} bash
+    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} OUTPUT_DIR=${OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} bash
     pushd ${OUTPUT_DIR}/gitops-0-bootstrap
     source ./script/set-git-source.sh
     git add .
