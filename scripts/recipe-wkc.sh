@@ -25,6 +25,7 @@ cat > infra-recipe <<EOF
 consolenotification.yaml
 namespace-ibm-common-services.yaml
 namespace-tools.yaml
+serviceaccounts-tools.yaml
 EOF
 
 cat > services-recipe <<EOF
@@ -35,6 +36,8 @@ ibm-foundations.yaml
 ibm-foundational-services-instance.yaml
 ibm-catalogs.yaml
 sealed-secrets.yaml
+ibm-cp4d-watson-studio-operator.yaml
+ibm-cp4d-watson-studio-instance.yaml
 EOF
 
 cat infra-recipe | awk '{print "sed -i.bak '\''/"$1"/s/^#//g'\'' 0-bootstrap/single-cluster/1-infra/kustomization.yaml" }' | bash
@@ -46,18 +49,21 @@ rm 0-bootstrap/single-cluster/2-services/kustomization.yaml.bak
 rm infra-recipe
 rm services-recipe
 
-git add .
-git commit -m "Adding CPD resources"
-git push origin
+# git add .
+# git commit -m "Adding CPD resources"
+# git push origin
 
 #popd
 
 #pushd ${OUTPUT_DIR}/gitops-2-services
+
 sed -i.bak 's/managed-nfs-storage/'${RWX_STORAGECLASS}'/g' 0-bootstrap/single-cluster/2-services/argocd/instances/ibm-cpd-instance.yaml
 rm 0-bootstrap/single-cluster/2-services/argocd/instances/ibm-cpd-instance.yaml.bak
+sed -i.bak 's/managed-nfs-storage/'${RWX_STORAGECLASS}'/g' 0-bootstrap/single-cluster/2-services/argocd/instances/ibm-cp4d-watson-studio-instance.yaml
+rm 0-bootstrap/single-cluster/2-services/argocd/instances/ibm-cp4d-watson-studio-instance.yaml.bak
 
 git add .
-git commit -m "Adding CPD resources and changing storageClass"
+git commit -m "Adding WKC resources and changing storageClass"
 git push origin
 
 popd

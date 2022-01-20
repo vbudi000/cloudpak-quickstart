@@ -222,6 +222,11 @@ apply_cpd_recipe() {
     source ${SCRIPTDIR}/recipe-cp4d.sh
 }
 
+apply_wkc_recipe() {
+    source ${SCRIPTDIR}/recipe-wkc.sh
+}
+
+
 apply_cpdsample_recipe() {
     # source ${SCRIPTDIR}/recipe-cp4dsample.sh
     echo "TBD ${WHITE} Not implemented ${NC}"
@@ -292,6 +297,13 @@ fi
 
 if [[ "${ADD_CPD}" == "yes" ]]; then
     apply_cpd_recipe
+    #if [[ "${ADD_CPDSAMPLE}" == "yes" ]]; then
+    #    apply_cpdsample_recipe
+    #fi
+fi
+
+if [[ "${ADD_WKC}" == "yes" ]]; then
+    apply_wkc_recipe
     #if [[ "${ADD_CPDSAMPLE}" == "yes" ]]; then
     #    apply_cpdsample_recipe
     #fi

@@ -6,7 +6,7 @@ if [ -d "cloudpak-quickstart" ]; then
 else 
     git clone https://github.com/vbudi000/cloudpak-quickstart
 fi
-unset ADD_INFRA ADD_MQ ADD_MQAPPS ADD_ACE ADD_ACEAPPS ADD_CPD ADD_APIC ADD_APICAPPS ADD_CPDSAMPLE ADD_PROCMINING
+unset ADD_INFRA ADD_MQ ADD_MQAPPS ADD_ACE ADD_ACEAPPS ADD_CPD ADD_APIC ADD_APICAPPS ADD_CPDSAMPLE ADD_PROCMINING ADD_WKC
 ###########################################################
 # Change the following environment variables
 ###########################################################
@@ -26,6 +26,7 @@ export ADD_ACE=yes
 export ADD_ACEAPPS=yes
 export ADD_APIC=yes
 export ADD_CPD=yes
+export ADD_WKC=yes
 export ADD_PROCMINING=yes
 ###########################################################
 # End environment variable changes
