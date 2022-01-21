@@ -20,14 +20,15 @@ export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
 # Start deployment of Quick Start - pick and choose the components to enable
 ###########################################################
 export ADD_INFRA=yes
-export ADD_MQ=yes
+export ADD_MQ=yes                # CP4I MQ
 export ADD_MQAPPS=yes
-export ADD_ACE=yes
-export ADD_ACEAPPS=yes
-export ADD_APIC=yes
-export ADD_CPD=yes
-export ADD_WKC=yes
-export ADD_PROCMINING=yes
+export ADD_ACE=yes               # CP4I App Connect Enterprise
+export ADD_ACEAPPS=yes           
+export ADD_APIC=yes              # CP4I API Connect
+export ADD_CPD=yes               # CP4D base service
+export ADD_WS=yes                # CP4D Watson Studio
+export ADD_PROCMINING=yes        # CP4BA Process Mining
+export ADD_CP4S=yes              # CP4Security
 ###########################################################
 # End environment variable changes
 ###########################################################

@@ -6,7 +6,7 @@ source cloudpak-quickstart/scripts/prep.sh
 
 pushd ${OUTPUT_DIR}/gitops-0-bootstrap
 
-echo -e "${WHITE}Applying CP4D recipe${NC}"
+echo -e "${WHITE}Applying CP4D - Watson Studio recipe${NC}"
 
 if [ -d "0-bootstrap/single-cluster" ]; then
     echo "Running from gitops-0-bootstrap"
@@ -78,9 +78,20 @@ while [[ "$cnt" != "Completed" ]]; do
 done
 echo ""
 
+echo -e -n "${WHITE}Waiting till ${LBLUE}Watson Studio${WHITE} is ready ${NC}"
+sleep 20
+cnt=$(oc get WS ws-cr -n tools -o jsonpath="{.status.wsStatus}")
+while [[ "$cnt" != "Completed" ]]; do
+    sleep 60
+    echo -n "."
+    cnt=$(oc get WS ws-cr -n tools -o jsonpath="{.status.wsStatus}")
+done
+echo ""
+
 zenURL=$(oc -n tools get ZenService lite-cr -o jsonpath="{.status.url}")
 echo -e "${WHITE}CP4D recipe ready${NC} login at ${WHITE}https://${zenURL}${NC} "
 echo -e "The admin password is:"
 oc -n tools extract secret/admin-user-details --keys=initial_admin_password --to=-
 
-echo -e "${WHITE}Completed CP4D recipe${NC}"
+echo -e "${WHITE}Completed CP4D - Watson Studio recipe${NC}"
+

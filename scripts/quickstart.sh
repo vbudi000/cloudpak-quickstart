@@ -222,10 +222,9 @@ apply_cpd_recipe() {
     source ${SCRIPTDIR}/recipe-cp4d.sh
 }
 
-apply_wkc_recipe() {
-    source ${SCRIPTDIR}/recipe-wkc.sh
+apply_ws_recipe() {
+    source ${SCRIPTDIR}/recipe-ws.sh
 }
-
 
 apply_cpdsample_recipe() {
     # source ${SCRIPTDIR}/recipe-cp4dsample.sh
@@ -246,6 +245,10 @@ apply_ads_recipe() {
 
 apply_adsapps_recipe() {
     echo "TBD ${WHITE} Not implemented ${NC}"
+}
+
+apply_cp4s_recipe() {
+    source ${SCRIPTDIR}/recipe_cp4s.sh
 }
 
 ###############################################################################
@@ -302,8 +305,8 @@ if [[ "${ADD_CPD}" == "yes" ]]; then
     #fi
 fi
 
-if [[ "${ADD_WKC}" == "yes" ]]; then
-    apply_wkc_recipe
+if [[ "${ADD_WS}" == "yes" ]]; then
+    apply_ws_recipe
     #if [[ "${ADD_CPDSAMPLE}" == "yes" ]]; then
     #    apply_cpdsample_recipe
     #fi
@@ -320,6 +323,14 @@ fi
 
 if [[ "${ADD_ADS}" == "yes" ]]; then
     apply_ads_recipe
+    #if [[ "${ADD_ADSAPPS}" == "yes" ]]; then
+    #    apply_adsapps_recipe
+    #fi
+fi
+
+
+if [[ "${ADD_CP4S}" == "yes" ]]; then
+    apply_cp4s_recipe
     #if [[ "${ADD_ADSAPPS}" == "yes" ]]; then
     #    apply_adsapps_recipe
     #fi
