@@ -248,7 +248,7 @@ apply_adsapps_recipe() {
 }
 
 apply_cp4s_recipe() {
-    source ${SCRIPTDIR}/recipe_cp4s.sh
+    source ${SCRIPTDIR}/recipe-cp4s.sh
 }
 
 ###############################################################################
