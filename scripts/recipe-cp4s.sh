@@ -63,26 +63,26 @@ popd
 
 echo -e -n "${WHITE}Waiting till ${LBLUE}CP4S Threat Management${WHITE} is ready ${NC}"
 sleep 20
-cnt=$(oc get CP4SThreatManagement threatmgmt -n tools -o jsonpath='{.status.conditions}')
-while [[ "$cnt" != "Cloudpak for Security Deployment is successful" ]]; do
+cnt=$(oc get CP4SThreatManagement threatmgmt -n tools -o jsonpath='{.status.conditions[0].type}')
+while [[ "$cnt" != "Success" ]]; do
     sleep 60
-    echo $cnt
     echo -n "."
-    cnt=$(oc get CP4SThreatManagement threatmgmt -n tools -o jsonpath='{.status.conditions}')
+    cnt=$(oc get CP4SThreatManagement threatmgmt -n tools -o jsonpath='{.status.conditions[0].type}')
 done
 echo ""
 
 echo -e -n "${WHITE}Deploying OpenLDAP ${NC}"
 sleep 10
 
-POD=$(oc get pod --no-headers -lrun=cp-serviceability | cut -d' ' -f1)
-oc cp $POD:/opt/bin/<operatingsystem>/cpctl ./cpctl && chmod +x ./cpctl
-./cpctl load
-./cpctl tools deploy_openldap --token $(oc whoami -t) --ldap_usernames 'adminUser,user1,user2,user3' --ldap_password cloudpak
+POD=$(oc get pod --no-headers -n tools -lrun=cp-serviceability | cut -d' ' -f1)
+OS=$(uname | tr '[:upper:]' '[:lower:]')
+oc cp -n tools $POD:/opt/bin/$OS/cpctl cpctl && chmod +x cpctl
+./cpctl load -n tools
+./cpctl tools deploy_openldap -n tools --token $(oc whoami -t) --ldap_usernames 'adminUser,user1,user2,user3' --ldap_password cloudpak
 
 cp4sURL=$(oc get route isc-route-default --no-headers -n tools | awk '{print $2}')
 
 echo -e "${WHITE}CP4S recipe ready${NC} login at ${WHITE}https://${cp4sURL}${NC} "
-echo -e "The admin password is: cloudpak"
+echo -e "The adminUser password is: cloudpak"
 
 
