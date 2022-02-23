@@ -71,7 +71,7 @@ if [[ "gh_stat" -gt 0 ]]; then
     exit 1
 fi
 
-mkdir -p "${OUTPUT_DIR}"
+mkdir -p "${QS_OUTPUT_DIR}"
 
 create_cluster() {
     echo -e "${WHITE}Creating OpenShift cluster${NC}"
@@ -96,7 +96,7 @@ fork_gh_repo() {
     repoorg=$1
     reponame=$2
     dirname=$3
-    pushd ${OUTPUT_DIR}
+    pushd ${QS_OUTPUT_DIR}
     echo -e "${WHITE}Forking GitOps repository \"${reponame}\"${NC}"
     GHREPONAME=$(gh api /repos/${GIT_ORG}/${reponame} -q .name || true)
     if [[ ! ${GHREPONAME} = "${reponame}" ]]; then
@@ -129,7 +129,7 @@ fork_repos() {
 
 run_bootstrap() {
     echo -e "${WHITE}Invoking bootstrap script${NC}"
-    curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} OUTPUT_DIR=${OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} bash
+    curl -sfL https://raw.githubusercontent.com/vbudi000/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} QS_OUTPUT_DIR=${QS_OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} bash
   
     gitopsURL=$(oc get route -n openshift-gitops openshift-gitops-cntk-server -o template --template='https://{{.spec.host}}')
     gitopsPWD=$(oc get secrets/openshift-gitops-cntk-cluster -o 'go-template={{index .data "admin.password"}}' -n openshift-gitops | base64 -d)
@@ -150,7 +150,7 @@ run_bootstrap() {
 create_infra_components() {
     echo -e "${WHITE}Adding infrastructure components${NC}"
     
-    pushd ${OUTPUT_DIR}/gitops-0-bootstrap
+    pushd ${QS_OUTPUT_DIR}/gitops-0-bootstrap
     
     source ./scripts/infra-mod.sh
     popd
@@ -172,11 +172,11 @@ create_infra_components() {
 
 # Specific components - enabled using ENVIRONMENT variable
 apply_mq_recipe() {
-    source ${SCRIPTDIR}/recipe-mq.sh
+    source ${QS_SCRIPTDIR}/recipe-mq.sh
 }
 
 apply_mqapps_recipe() {
-    pushd ${OUTPUT_DIR}
+    pushd ${QS_OUTPUT_DIR}
     
     fork_gh_repo cloud-native-toolkit-demos multi-tenancy-gitops-apps gitops-3-apps
     fork_gh_repo cloud-native-toolkit-demos mq-infra 
@@ -184,28 +184,28 @@ apply_mqapps_recipe() {
     
     popd
     
-    source ${SCRIPTDIR}/recipe-mqapps.sh
+    source ${QS_SCRIPTDIR}/recipe-mqapps.sh
     
 }
 
 apply_ace_recipe() {
-    source ${SCRIPTDIR}/recipe-ace.sh
+    source ${QS_SCRIPTDIR}/recipe-ace.sh
 }
 
 apply_aceapps_recipe() {
-    pushd ${OUTPUT_DIR}
+    pushd ${QS_OUTPUT_DIR}
     
     fork_gh_repo cloud-native-toolkit-demos multi-tenancy-gitops-apps gitops-3-apps
     fork_gh_repo cloud-native-toolkit-demos ace-customer-details src-ace-app-customer-details
     
     popd
     
-    source ${SCRIPTDIR}/recipe-aceapps.sh
+    source ${QS_SCRIPTDIR}/recipe-aceapps.sh
 }
 
 # Specific components - enabled using ENVIRONMENT variable
 apply_apic_recipe() {
-    source ${SCRIPTDIR}/recipe-apic.sh
+    source ${QS_SCRIPTDIR}/recipe-apic.sh
 }
 
 apply_apicapps_recipe() {
@@ -213,20 +213,20 @@ apply_apicapps_recipe() {
 }
 
 apply_cpd_recipe() {
-    source ${SCRIPTDIR}/recipe-cp4d.sh
+    source ${QS_SCRIPTDIR}/recipe-cp4d.sh
 }
 
 apply_ws_recipe() {
-    source ${SCRIPTDIR}/recipe-ws.sh
+    source ${QS_SCRIPTDIR}/recipe-ws.sh
 }
 
 apply_cpdsample_recipe() {
-    # source ${SCRIPTDIR}/recipe-cp4dsample.sh
+    # source ${QS_SCRIPTDIR}/recipe-cp4dsample.sh
     echo "TBD ${WHITE} Not implemented ${NC}"
 }
 
 apply_procmining_recipe() {
-    source ${SCRIPTDIR}/recipe-procmining.sh
+    source ${QS_SCRIPTDIR}/recipe-procmining.sh
 }
 
 apply_procminingapps_recipe() {
@@ -242,7 +242,7 @@ apply_adsapps_recipe() {
 }
 
 apply_cp4s_recipe() {
-    source ${SCRIPTDIR}/recipe-cp4s.sh
+    source ${QS_SCRIPTDIR}/recipe-cp4s.sh
 }
 
 ###############################################################################
