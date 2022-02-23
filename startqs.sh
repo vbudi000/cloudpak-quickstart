@@ -35,6 +35,7 @@ export ADD_CP4S=no              # CP4Security
 export GIT_TOKEN=${GITHUB_TOKEN}
 export SOURCE_DIR=$(pwd)
 export OUTPUT_DIR=gitops
+export QS_OUTPUT_DIR=gitops
 
 if [ -f "install-config.yaml" ]; then
     echo "The install-config.yaml exists. Will create new OpenShift install."
