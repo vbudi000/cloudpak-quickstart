@@ -130,13 +130,7 @@ fork_repos() {
 run_bootstrap() {
     echo -e "${WHITE}Invoking bootstrap script${NC}"
     curl -sfL https://raw.githubusercontent.com/cloud-native-toolkit/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} OUTPUT_DIR=${OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} bash
-    pushd ${OUTPUT_DIR}/gitops-0-bootstrap
-    source ./scripts/set-git-source.sh
-    git add .
-    git commit -m "setting git source for argoCD for $GIT_ORG"
-    git push 
-    popd
-
+  
     gitopsURL=$(oc get route -n openshift-gitops openshift-gitops-cntk-server -o template --template='https://{{.spec.host}}')
     gitopsPWD=$(oc get secrets/openshift-gitops-cntk-cluster -o 'go-template={{index .data "admin.password"}}' -n openshift-gitops | base64 -d)
     

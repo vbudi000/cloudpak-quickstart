@@ -85,7 +85,7 @@ sleep 30
 
 echo -e "${WHITE}Preparing Tekton pipelines${NC}"
 
-piperun=$(tkn pipeline start mq-infra-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-infra.git" 2>/dev/null | grep pipelinerun)
+piperun=$(tkn pipeline start mq-infra-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-infra.git" --use-param-defaults 2>/dev/null | grep pipelinerun)
 infra-plrun=$(echo $piperun | cut -d" " -f4)
 $piperun 2>/dev/null  >> mq-infra.log
 pipestat=$(oc get pipelinerun $infra-plrun -n ci --no-headers | cut -d" " -f7)
@@ -96,7 +96,7 @@ if [[ $pipestat != "Succeeded" ]]; then
     return
 fi
 
-piperun=$(tkn pipeline start mq-spring-app-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-spring-app.git" 2>/dev/null | grep pipelinerun)
+piperun=$(tkn pipeline start mq-spring-app-dev -n ci -p git-url="https://github.com/${GIT_ORG}/mq-spring-app.git" --use-param-defaults 2>/dev/null | grep pipelinerun)
 app-plrun=$(echo $piperun | cut -d" " -f4)
 $piperun 2>/dev/null >> mq-spring-app.log
 pipestat=$(oc get pipelinerun $app-plrun -n ci --no-headers | cut -d" " -f7)
