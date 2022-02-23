@@ -76,7 +76,7 @@ done
 echo ""
 sleep 30
 
-piperun=$(tkn pipeline start ace-build-bar-promote-dev -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p is-source-revision="master" --workspace name=shared-workspace,claimName=ace-bar-pvc 2>/dev/null | grep pipelinerun)
+piperun=$(tkn pipeline start ace-build-bar-promote-dev -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p is-source-revision="master" --use-param-defaults --workspace name=shared-workspace,claimName=ace-bar-pvc 2>/dev/null | grep pipelinerun)
 plrun=$(echo $piperun | cut -d" " -f4)
 $piperun 2>/dev/null  >> ace-build-bar-promote-dev.log
 
@@ -88,7 +88,7 @@ if [[ $pipestat != "Succeeded" ]]; then
 fi
 oc rollout restart deploy/create-customer-details-rest-is -n dev
 
-piperun=$(tkn pipeline start ace-promote-dev-stage -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p source-env="dev" -p destination-env="staging" --workspace name=shared-workspace,claimName=ace-test-pvc 2>/dev/null | grep pipelinerun)
+piperun=$(tkn pipeline start ace-promote-dev-stage -n ci -p is-source-repo-url="https://github.com/${GIT_ORG}/ace-customer-details" -p source-env="dev" -p destination-env="staging" --use-param-defaults --workspace name=shared-workspace,claimName=ace-test-pvc 2>/dev/null | grep pipelinerun)
 plrun=$(echo $piperun | cut -d" " -f4)
 $piperun 2>/dev/null >> ace-promote-dev-stage.log
 
