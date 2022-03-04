@@ -23,28 +23,49 @@ These are the pre-requisites:
 
 GIT Personal Access Token and GitHub Organization instruction can be read at [Personal Access Token](https://pages.github.ibm.com/cloudpakbringup/production-deployment-guides/snippets/gitops-cluster-prereq/#create-a-git-personal-access-token-pat) and [GitHub Organization](https://pages.github.ibm.com/cloudpakbringup/production-deployment-guides/snippets/gitops-cluster-prereq/#create-a-custom-git-organization).
 
-Before running the installer setup the necessary environment variables:
+Sample environment variables for running in various GIT backend:
 
-```bash
-export SOURCE_DIR="/path-to-setup-dir"
-export GITHUB_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
-export GIT_USER="gituser"
-export GIT_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
-export GIT_ORG="git_organization"
-export SEALED_SECRET_KEY_FILE=./ss.yaml
-export OUTPUT_DIR="gitops"
-export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
-export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
-## component switches
-export ADD_INFRA="yes"
-export ADD_MQ="yes"
-export ADD_MQAPPS="yes" 
-export ADD_ACE="yes"
-export ADD_ACEAPPS="yes"
-export ADD_APIC="yes
-export ADD_CPD="yes"
-export ADD_PROCMINING="yes"
-```
+- GitHub 
+    ```bash
+    export GIT_TARGET="github"
+    export GIT_USER="gituser"
+    export GIT_TOKEN="ghp_nnnnnnnnnnnnnnnnnnnnn" 
+    export GIT_BRANCH="master"
+    export GIT_ORG="git_org1"
+    export SEALED_SECRET_KEY_FILE=./ss.yaml
+    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
+    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
+    ```
+
+- GitLab
+    ```bash
+    export GIT_TARGET=gitlab
+    export GIT_USER="user000"
+    export GIT_TOKEN="glpat-sasdasdasasdas"
+    export GIT_HOST="gitlab.com"
+    export GIT_BRANCH=main
+    export GIT_BASEURL=https://gitlab.com
+    export GIT_ORG="org000"
+    export SEALED_SECRET_KEY_FILE=./ss.yaml
+    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
+    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
+    ```
+
+- Gitea
+
+    ```bash
+    OCDOMAIN=$(oc get ingresscontrollers.operator.openshift.io -n openshift-ingress-operator   default -o jsonpath='{.status.domain}')
+    export GIT_TARGET=gitea
+    export GIT_USER="user1"
+    export GIT_BRANCH=main
+    export GIT_BASEURL=https://gitea-tools.${OCDOMAIN}/
+    export GIT_HOST=gitea-tools.${OCDOMAIN}
+    export DEBUG=true
+    export GIT_ORG="org1"
+    export SEALED_SECRET_KEY_FILE=./ss.yaml
+    export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
+    export IBM_ENTITLEMENT_KEY="xxxxxxxxxxxxxxxxxx"
+    ```
 
 Run the quickstart program
 
@@ -62,15 +83,18 @@ You can initiate the script using the following procedure, on a working director
 curl -sfL https://raw.githubusercontent.com/vbudi000/cloudpak-quickstart/master/startqs.sh > startqs.sh
 ```
 
-Edit the environment parameters section of the downloaded script:
+Edit the environment parameters section of the downloaded script: 
 
 ```bash 
 ###########################################################
 # Change the following environment variables
 ###########################################################
+export GIT_TARGET="github"
 export GIT_USER="gituser"
-export GITHUB_TOKEN="ghp_key"
+export GIT_TOKEN="ghp_key"
+export GIT_BRANCH="master"
 export GIT_ORG="git-org"
+export GIT_HOST="github.com"
 export IBM_ENTITLEMENT_KEY="entitlement-key"
 export SEALED_SECRET_KEY_FILE=./shared-secret.yaml
 export RWX_STORAGECLASS="ocs-storagecluster-cephfs"
@@ -84,6 +108,8 @@ export ADD_ACE=yes
 export ADD_ACEAPPS=yes
 export ADD_APIC=yes
 export ADD_CPD=yes
+export ADD_WS=yes
+export ADD_CP4S=yes
 export ADD_PROCMINING=yes
 ###########################################################
 # End environment variable changes

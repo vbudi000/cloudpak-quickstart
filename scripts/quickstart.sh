@@ -129,7 +129,12 @@ fork_repos() {
 
 run_bootstrap() {
     echo -e "${WHITE}Invoking bootstrap script${NC}"
-    curl -sfL https://raw.githubusercontent.com/vbudi000/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} QS_OUTPUT_DIR=${QS_OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} bash
+    curl -sfL https://raw.githubusercontent.com/vbudi000/multi-tenancy-gitops/master/scripts/bootstrap.sh > bootstrap.sh
+    curl -sfL https://raw.githubusercontent.com/vbudi000/multi-tenancy-gitops/master/scripts/gitea-install.sh > gitea-install.sh
+    chmod a+x *.sh
+    DEBUG=${DEBUG} GIT_ORG=${GIT_ORG} QS_OUTPUT_DIR=${QS_OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} GIT_TARGET=${GIT_TARGET} bash bootstrap.sh
+    rm bootstrap.sh gitea-install.sh
+    #curl -sfL https://raw.githubusercontent.com/vbudi000/multi-tenancy-gitops/master/scripts/bootstrap.sh | DEBUG="" GIT_ORG=${GIT_ORG} QS_OUTPUT_DIR=${QS_OUTPUT_DIR} IBM_ENTITLEMENT_KEY=${IBM_ENTITLEMENT_KEY} CP_EXAMPLE=${CP_EXAMPLE} bash
   
     gitopsURL=$(oc get route -n openshift-gitops openshift-gitops-cntk-server -o template --template='https://{{.spec.host}}')
     gitopsPWD=$(oc get secrets/openshift-gitops-cntk-cluster -o 'go-template={{index .data "admin.password"}}' -n openshift-gitops | base64 -d)
@@ -179,8 +184,8 @@ apply_mqapps_recipe() {
     pushd ${QS_OUTPUT_DIR}
     
     fork_gh_repo cloud-native-toolkit-demos multi-tenancy-gitops-apps gitops-3-apps
-    fork_gh_repo cloud-native-toolkit-demos mq-infra 
-    fork_gh_repo cloud-native-toolkit-demos mq-spring-app 
+    fork_gh_repo cloud-native-toolkit mq-infra 
+    fork_gh_repo cloud-native-toolkit mq-spring-app 
     
     popd
     
